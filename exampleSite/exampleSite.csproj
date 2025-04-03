@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\index.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="App\app_offline.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="App\myApiTester\html\apiLists.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="App\myApiTester\html\app_tester.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="App\myApiTester\html\easymap.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="App\myApiTester\html\login.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="App\myApiTester\template\top.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /y /e &quot;$(TargetDir)App\app_offline.htm&quot; &quot;$(TargetDir)..\..\Release\net8.0\publish\&quot;&#xD;&#xA;ping 127.0.0.1 -n 5 -w 1000 &gt; nul&#xD;&#xA;xcopy /y /e &quot;$(TargetDir)*.*&quot; &quot;$(TargetDir)..\..\Release\net8.0\publish\&quot;&#xD;&#xA;del &quot;$(TargetDir)..\..\Release\net8.0\publish\app_offline.htm&quot;&#xD;&#xA;" />
+  </Target>
+
+</Project>

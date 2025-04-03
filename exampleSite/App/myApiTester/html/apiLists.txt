@@ -1,0 +1,100 @@
+{
+  "API_INFO":{
+    "title": "我的各種 API",
+    "description": "各種 api"
+  },
+  "test": {
+    "isHidden" : false,
+    "description": "測試 WebService API 是否正常，正常會回應 HelloWorld!",
+    "GET": null,
+    "POST": null,
+    "FILE": null
+  },
+  "add_GET": {
+    "description": "GET A + B",
+    "GET": {
+      "A": {
+        "sample": "3",
+        "description": "請填入數值"
+      },
+      "B": {
+        "sample": "5",
+        "description": "請填入數值"
+      }
+    },
+    "POST": null,
+    "FILE": null
+  },
+  "mul_GET": {
+    "description": "GET A * B",
+    "result": "回應 A * B",
+    "GET": {
+      "A": {
+        "sample": "3",
+        "description": "請填入數值"
+      },
+      "B": {
+        "sample": "5",
+        "description": "請填入數值"
+      }
+    },
+    "POST": null,
+    "FILE": {
+       "upload": {
+        "sample": "",
+        "description": "請塞入文字檔，裡面的內容也會相乘，內容為 json { \"A\":3,\"B\":5 } "
+      }
+    }
+  },
+  "add_POST": {
+    "description": "POST A + B",
+    "GET": null,
+    "POST": {
+      "A": {
+        "sample": "3",
+        "description": "請填入數值"
+      },
+      "B": {
+        "sample": "5",
+        "description": "請填入數值"
+      }
+    },
+    "FILE": null
+  },
+  "add_GET_POST": {
+    "description": "GET A + B , POST A + B",
+    "GET": {
+      "A": {
+        "sample": "3",
+        "description": "請填入數值"
+      },
+      "B": {
+        "sample": "5",
+        "description": "請填入數值"
+      }
+    },
+    "POST": {
+      "AA": {
+        "sample": "33",
+        "description": "請填入數值"
+      },
+      "BB": {
+        "sample": "55",
+        "description": "請填入數值"
+      }
+    },
+    "FILE": null
+  },
+  "datetime": {
+    "description": "取得目前時間",
+    "GET": null,
+    "POST": null,
+    "FILE": null
+  },
+  "datetime_login": {
+    "description": "(需登入)取得目前時間",
+    "GET": null,
+    "POST": null,
+    "FILE": null
+  }
+}

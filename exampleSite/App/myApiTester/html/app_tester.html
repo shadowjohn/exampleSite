@@ -1,0 +1,473 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>大千世界，共享人生的價值</title>
+    <meta name="Resource-Type" content="document">
+    <meta name="Distribution" content="Global">
+    <meta name="Author" content="羽山秋人">
+    <meta name="Keywords" content="FB">
+    <meta name="Generator" content="3WA-Company">
+    <script language="javascript">
+        var API_URL = [
+            "{{BASE_URL}}MYAPI/?mode={$k}&"            
+        ];
+    </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-migrate-3.5.2.min.js" integrity="sha256-ocUeptHNod0gW2X1Z+ol3ONVAGWzIJXUmIs+4nUeDLI=" crossorigin="anonymous"></script>
+    <script src="https://3wa.tw/inc/javascript/php/myphp.js"></script>
+    <script src="https://3wa.tw/inc/javascript/include.js"></script>
+    <style>
+        .top .top_title {
+            font-size: 2em;
+            padding: 10px;
+            text-align: center;
+        }
+        .top{            
+            font-size: 1.5em;
+            padding: 10px;
+            text-align: center;
+        }
+        .menu {
+            word-wrap: break-word; /* IE */
+            left: 5px;
+            width: 95%;
+            background-color: #efc;
+            text-align: left;
+            margin-left: 15px;
+            margin-right: auto;
+            padding-left: 35px;
+        }
+
+        .underline {
+            text-decoration: underline;
+        }
+
+        .api_table {
+            width: 80%;
+        }
+
+            .api_table tr td .title {
+                font-weight: bold;
+            }
+
+            .api_table tr td .titleH1 {
+                font-weight: bold;
+                text-align: center;
+                background-color: orange;
+            }
+
+            .api_table tr td .description {
+                margin-left: 15px;
+                word-wrap: break-all;
+                word-wrap: break-word; /* IE */
+            }
+
+                .api_table tr td .description ul {
+                    margin-top: -15px;
+                }
+
+                .api_table tr td .description input[type='submit'] {
+                    margin-right: 10px;
+                    margin-bottom: 10px;
+                }
+
+                .api_table tr td .description ul li {
+                    list-style-type: square;
+                    margin-left: 35px;
+                }
+
+        input[type='text'] {
+            width: 600px;
+            border: 1px solid #fff;
+            border-bottom: 1px solid #000;
+        }
+
+        textarea {
+            width: 700px;
+            height: 300px;
+        }
+
+        .description li {
+            display: block;
+            margin-top: 15px;
+        }
+    </style>
+    <script language="javascript">
+
+        //var API_URL = "http://3wa.tw/webservice/api.php";
+        //   if(is_string_like(location.href,"%192.168%"))
+        //   {
+        //     API_URL = "http://192.168.8.91/big/api.py";
+        //   }
+        //   else
+        //   {
+        //     API_URL = "http://ip7.gis.tw/big/api.py";
+        //   }
+        //var API_URL = "big/api.py";
+        function myAjax_GETONLY(url) {
+            var tmp = $.ajax({
+                url: url,
+                type: "GET",
+
+                async: false
+            }).responseText;
+            return tmp;
+        }
+        function preg_replace(array_pattern, array_pattern_replace, my_string) {
+            var new_string = String(my_string);
+            for (i = 0; i < array_pattern.length; i++) {
+                var reg_exp = RegExp(array_pattern[i], "gi");
+                var val_to_replace = array_pattern_replace[i];
+                new_string = new_string.replace(reg_exp, val_to_replace);
+            }
+            return new_string;
+        }
+        function jsAddSlashes($str) {
+            $pattern = new Array(
+                "/\\\\/", "/\n/", "/\r/", "/\"/",
+                "/\'/", "/&/", "/</", "/>/"
+            );
+            $replace = new Array(
+                "\\\\\\\\", "\\n", "\\r", "\\\"",
+                "\\'", "\\x26", "\\x3C", "\\x3E"
+            );
+            return preg_replace($pattern, $replace, $str);
+        }
+        function AddSlashes(string) {
+            return string.replace(/\\/g, '\\\\').
+                replace(/\u0008/g, '\\b').
+                replace(/\t/g, '\\t').
+                replace(/\n/g, '\\n').
+                replace(/\f/g, '\\f').
+                replace(/\r/g, '\\r').
+                replace(/'/g, '\\\'').
+                replace(/"/g, '\\"');
+        }
+        function mixtogether(api) {
+            var method = $("#" + api).attr('method').toUpperCase();
+            var action = $("#" + api).attr('req');
+            action += "&";
+            var GETS_DOM = $("#" + api).find("input[req^='GET_']");
+            var GETS_P = new Array();
+            for (i = 0, max_i = GETS_DOM.length; i < max_i; i++) {
+                array_push(GETS_P, sprintf("%s=%s", urlencode(str_replace('GET_', '', GETS_DOM.eq(i).attr('req'))), urlencode(GETS_DOM.eq(i).val())));
+            }
+            action += implode("&", GETS_P);
+            console.log(action);
+            $("#" + api).attr('action', action);
+            // C# 裡的純 GET 用 window.open 比較妥
+            if (method == "GET") {
+                window.open(action);
+                return false;
+            }
+        }
+        function encode_utf8(s) {
+            return unescape(encodeURIComponent(s));
+        }
+        function decode_utf8(s) {
+            return decodeURIComponent(escape(s));
+        }
+        $(document).ready(function () {
+            // 上方功能
+            $("div[reqc='top']").load("{{BASE_URL}}apitester/top");
+            //$(".menu").corner();
+            var data = myAjax_GETONLY("{{BASE_URL}}apitester/getApiLists");
+            //alert(print_r(json_decode(data,true),true));
+            var apis = json_decode(data, true);
+            var tmp = "";
+            var mtbody = new Array();
+            var cmds = new Array();
+            var steps = 0;
+            var api_kinds = new Array();
+            for (var k in apis) {
+                if (k == "API_INFO") {
+                    continue;
+                }
+                if (apis[k]['isHidden'] != null && apis[k]['isHidden'] == true) {
+                    continue;
+                }
+                var api_kind_item = apis[k]['kind'];
+                if (api_kind_item == null) {
+                    api_kind_item = "未分類";
+                }
+                if (api_kind_item != null) {
+                    if (!in_array(api_kind_item, api_kinds)) {
+                        api_kinds.push(api_kind_item);
+                    }
+                }
+                tmp += sprintf("<li reqc_kind=\"%s\">", api_kind_item);
+                tmp += sprintf("<a href=\"#title_%s\">(%s) %s</a>：%s", k, api_kind_item, k, apis[k]['description']);
+                tmp += "</li>";
+
+                var tbody = $(".api_table tfoot").html();
+
+                var mAPIS = new Array();
+                for (var index in API_URL) {
+                    var urls = API_URL[index];
+                    var d = "<li><a target=\"_blank\" href=\"" + urls + "\">" + urls + "</a></li>";
+                    mAPIS.push(d);
+                }
+                tbody = str_replace("{$API_URLs}", "<ul>" + implode("\n", mAPIS) + "</ul>", tbody);
+
+                //執行面
+                tbody = str_replace("{$sAPI_URL}", API_URL[0], tbody);
+
+                //代換方法
+                tbody = str_replace("{$k}", k, tbody);
+                var uk = str_replace('/', '_', k);
+                tbody = str_replace("{$uk}", uk, tbody);
+
+                tbody = str_replace("{$v['description']}", apis[k]['description'], tbody);
+
+                if (api_kind_item != null) {
+                    tbody = str_replace("{$v['kind']}", api_kind_item, tbody); //kind
+                }
+                apis[k]['result_sample'] = trim(apis[k]['result_sample']);
+                var j_pre_input = "";
+                if (is_string_like(apis[k]['result_sample'], '%Json 格式%')) {
+                    //j_pre_input+="<input type='button' value='反碼'";
+                }
+                tbody = str_replace("{$RESULT}", nl2br(apis[k]['result_sample']), tbody);
+
+
+
+                var mk = explode(",", "GET,POST,FILE");
+                for (var kind in mk) {
+                    switch (apis[k][mk[kind]]) {
+                        case null:
+                            tbody = str_replace("{$" + mk[kind] + "}", "Empty", tbody);
+                            tbody = str_replace("{$" + mk[kind] + "_DESCRIPTION}", "Empty", tbody);
+                            break;
+                        default:
+                            var GET_POST = "";
+                            for (var pk in apis[k][mk[kind]]) {
+                                GET_POST += sprintf("<li style='display:block;'>【" + pk + "】：" + apis[k][mk[kind]][pk]['description'] + "</li>");
+                            }
+                            tbody = str_replace("{$" + mk[kind] + "}", "<ul>" + GET_POST + "</ul>", tbody);
+
+                            var GET_POST_DESCRIPTION = "";
+                            GET_POST_DESCRIPTION += "<div style=\"padding-top:10px;\">";
+                            GET_POST_DESCRIPTION += "<ul>";
+
+                            for (var pk in apis[k][mk[kind]]) {
+                                //alert(mk[kind]);
+                                switch (mk[kind]) {
+                                    case 'GET':
+                                        {
+                                            //var pv = jsAddSlashes(apis[k][mk[kind]][pk]['sample']);
+                                            var pv = apis[k][mk[kind]][pk]['sample'];
+                                            //2023-03-17
+                                            //sample 裡的 {{time}} 換成 time()
+                                            pv = pv.replace("{{time}}", new Date().getTime() / 1000);
+
+                                            if (is_string_like(pv, '%\n%')) {
+                                                GET_POST_DESCRIPTION += "<li style='display:block;'>【" + pk + "】：<textarea steps=\"" + steps + "\" req=\"GET_" + pk + "\">" + pv + "</textarea>";
+                                                GET_POST_DESCRIPTION += "<span style='display:none;' req=\"GET_" + pk + "\" steps=\"" + steps + "\">" + pv + "</span>";
+                                                var cmd = "$(\"textarea[req='GET_" + pk + "'][steps='" + steps + "']\").val($(\"span[req='GET_" + pk + "'][steps='" + steps + "']\").html());";
+                                                array_push(cmds, cmd);
+                                                steps++;
+                                            }
+                                            else {
+                                                GET_POST_DESCRIPTION += "<li style='display:block;'>【" + pk + "】：<input steps=\"" + steps + "\" type=\"text\" req=\"GET_" + pk + "\" value=\"" + pv + "\">";
+                                                GET_POST_DESCRIPTION += "<span style='display:none;' req=\"GET_" + pk + "\" steps=\"" + steps + "\">" + pv + "</span>";
+                                                var cmd = "$(\"input[req='GET_" + pk + "'][steps='" + steps + "']\").val($(\"span[req='GET_" + pk + "'][steps='" + steps + "']\").text());";
+                                                array_push(cmds, cmd);
+                                                steps++;
+                                            }
+                                            GET_POST_DESCRIPTION += "</li>";
+                                        }
+                                        break;
+                                    case 'POST':
+                                        {
+                                            //alert(jsAddSlashes(apis[k][mk[kind]][pk]['sample']));
+                                            var pv = apis[k][mk[kind]][pk]['sample'];
+                                            //2023-03-17
+                                            //sample 裡的 {{time}} 換成 time()
+                                            pv = pv.replace("{{time}}", new Date().getTime() / 1000);
+                                            pv = htmlspecialchars_decode(pv);
+                                            //console.log(pv);
+
+                                            if (is_string_like(pv, '%\n%')) {
+                                                GET_POST_DESCRIPTION += "<li>【" + pk + "】：<textarea steps=\"" + steps + "\" name=\"" + pk + "\">" + pv + "</textarea>";
+                                                GET_POST_DESCRIPTION += "<span style='display:none;' name=\"" + pk + "\" steps=\"" + steps + "\">" + pv + "</span>";
+                                                var cmd = "$(\"textarea[name='" + pk + "'][steps='" + steps + "']\").val($(\"span[name='" + pk + "'][steps='" + steps + "']\").html());";
+                                                array_push(cmds, cmd);
+                                                steps++;
+                                            }
+                                            else {
+                                                GET_POST_DESCRIPTION += "<li>【" + pk + "】：<input steps=\"" + steps + "\" type=\"text\" name=\"" + pk + "\" >";
+                                                GET_POST_DESCRIPTION += "<span style='display:none;' name=\"" + pk + "\" steps=\"" + steps + "\">" + pv + "</span>";
+                                                var cmd = "$(\"input[name='" + pk + "'][steps='" + steps + "']\").val(htmlspecialchars_decode($(\"span[name='" + pk + "'][steps='" + steps + "']\").html()));";
+                                                //alert(cmd);
+                                                //console.log(cmd);
+                                                array_push(cmds, cmd);
+                                                steps++;
+                                            }
+                                            GET_POST_DESCRIPTION += "</li>";
+                                            tbody = str_replace("{$GET_POST}", "POST", tbody);
+                                        }
+                                        break;
+                                    case 'FILE':
+                                        {
+                                            //var pv = jsAddSlashes(apis[k][mk[kind]]['sample']);
+                                            var isMultiStr = "";
+                                            var pks = pk;
+                                            if (apis[k][mk[kind]][pk]['isMulti'] != null && apis[k][mk[kind]][pk]['isMulti'] == true) {
+                                                isMultiStr = " multiple=\"true\" ";
+                                                pks += "[]";
+                                            }
+
+
+                                            GET_POST_DESCRIPTION += "<li>【" + pk + "】：<input steps=\"" + steps + "\" type=\"file\" name=\"" + pks + "\" " + isMultiStr + "></li>";
+                                            steps++;
+                                            //{$FILE}
+                                            //enctype="multipart/form-data"
+                                            tbody = str_replace("{$FILE_FORM}", "enctype=\"multipart/form-data\"", tbody);
+                                            tbody = str_replace("{$GET_POST}", "POST", tbody);
+                                        }
+                                        break;
+                                }
+                            }
+                            GET_POST_DESCRIPTION += "</ul>";
+                            GET_POST_DESCRIPTION += "</div>";
+                            tbody = str_replace("{$" + mk[kind] + "_DESCRIPTION}", GET_POST_DESCRIPTION, tbody);
+                    }
+                }
+                tbody = str_replace("{$GET_POST}", "GET", tbody); //終末如果仍是 {$GET_POST} 才是 GET
+                //如果有 FILE 就會變
+                tbody = str_replace("{$FILE_FORM}", "", tbody);
+                //console.log(tbody);
+                array_push(mtbody, tbody);
+            }
+            $("#menu_ul_list").html(tmp);
+            //產分類
+            var options = new Array();
+            var d = "<option value=\"\">-- 全部 --</option>";
+            options.push(d);
+            for (var k in api_kinds) {
+                var d = "<option value=\"" + api_kinds[k] + "\">" + api_kinds[k] + "</option>";
+                options.push(d);
+            }
+            $("#menu_kind_select").html(implode("\n", options));
+            //定義切換功能
+            $("#menu_kind_select").unbind("change").change(function () {
+                var val = $(this).val();
+                switch (val) {
+                    case "":
+                        {
+                            $("#menu_ul_list li").show();
+                            $(".api_table tbody tr").show();
+                        }
+                        break;
+                    default:
+                        {
+                            $("#menu_ul_list li").hide();
+                            $(".api_table tbody tr").hide();
+                            $("#menu_ul_list li[reqc_kind='" + val + "']").show();
+                            $(".api_table tbody tr[reqc_kind='" + val + "']").show();
+                        }
+                        break;
+                }
+            });
+
+            $(".api_table tbody").html(implode("\n", mtbody));
+            //alert(print_r(cmds,true));
+            var cmd = implode('\n', cmds);
+            //alert(cmd);
+            eval(cmd);
+        });
+    </script>
+</head>
+<body>
+    <div reqc="top"><!--上方功能--></div>
+    <div class="container-fluid cum-content">
+        <h2 class="title-header">
+            <span id="labFunTree">API 功能列表</span>
+        </h2>
+        <center>
+            &nbsp;&nbsp;&nbsp;
+            <div class="menu" align="left">
+                API分類：<select id="menu_kind_select"></select><br>
+                <ul id='menu_ul_list'>
+                    <!--foreach($API as $k=>$v)
+                    {
+                      <li><a href="#title_$k;">$k;</a>：$v['description'];</li>
+                    }
+                    -->
+                </ul>
+            </div>
+            <br>
+            <table class="api_table" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>API Method</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot style="display:none;">
+                    <tr reqc_kind="{$v['kind']}">
+                        <td valign="top">
+                            <div class='titleH1' id="title_{$k}">{$k}</div>
+                            <div class='title'>API URL：</div>
+                            <span class='description'>
+                                <!--<a target="_blank" href="{$API_URL}?mode={$k}">{$API_URL}?mode={$k}</a><span>-->
+                                {$API_URLs}
+                                <!--
+                                <div class='title'>REST API URL：</div>
+                                <span class='description'><a target="_blank" href="{$REST_API_URL}{$k}">{$REST_API_URL}{$k}</a><span>
+                                -->
+                                <div class='title'>Description：</div>
+                                <span class='description'>
+                                    {$v['description']}<span>
+
+                                        <div class='title'>GET parameter：</div>
+                                        <span class='description'>
+                                            {$GET}
+                                            <span>
+
+                                                <div class='title'>POST parameter：</div>
+                                                <span class='description'>
+                                                    {$POST}
+                                                    <span>
+                                                        <div class='title'>FILE parameter：</div>
+                                                        <span class='description'>
+                                                            {$FILE}
+                                                            <span>
+                                                                <hr>
+                                                                <div class='title'>Sample：</div>
+                                                                <form enctype="multipart/form-data" id="{$uk}" target="_blank" req="{$sAPI_URL}" action="{$sAPI_URL}" method="{$GET_POST}"
+                                                                      onsubmit="return mixtogether('{$uk}');">
+                                                                    <span class='description'>
+                                                                        <br><div class='title' style="display:inline;">GET：</div>
+                                                                        {$GET_DESCRIPTION}
+                                                                    </span>
+                                                                    <span class='description'>
+                                                                        <br><div class='title' style="display:inline;">POST：</div>
+                                                                        {$POST_DESCRIPTION}
+                                                                    </span>
+                                                                    <span class='description'>
+                                                                        <br><div class='title' style="display:inline;">FILE：</div>
+                                                                        {$FILE_DESCRIPTION}
+                                                                    </span>
+                                                                    <span class='description'>
+                                                                        <br><div class='title' style="display:inline;">Result Sample：<input id='this_open_{$k}' type='button' value='展開/縮合' onclick="$(this).closest('span').find('.result_p_class').toggle();"></div>
+                                                                        <p class='result_p_class' style="display:none;margin-left:10px;border:1px solid #000;padding:5px;">
+                                                                            {$RESULT}
+                                                                        </p>
+                                                                    </span>
+                                                                    <div align="right">
+                                                                        <input class="submit" type="submit" value="Run Test">
+                                                                    </div>
+                                                                </form>
+
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </center>
+    </div>
+</body>
+</html>
+

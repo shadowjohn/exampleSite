@@ -1,0 +1,95 @@
+﻿<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-migrate-3.5.2.min.js" integrity="sha256-ocUeptHNod0gW2X1Z+ol3ONVAGWzIJXUmIs+4nUeDLI=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+<script src="https://3wa.tw/inc/javascript/jquery/mybox/mybox-lastest.min.js"></script>
+<script src="https://3wa.tw/inc/javascript/php/myphp.js"></script>
+<script src="https://3wa.tw/inc/javascript/include.js"></script>
+<style>
+    html,body{
+        background-color: #000;
+        color: #fff;
+    }
+
+    input{
+        margin: 10px 0;
+        padding: 5px;
+        font-size: 1.5em;
+        position: relative;
+        z-index: 5;
+        background-color: #000;
+        color: #0f0;
+        font-weight:bold;
+        font-family: monospace;
+        border: 1px solid #fff;
+    }
+    button{
+        font-size: 1.5em;
+        position: relative;
+        z-index: 5;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    h3{
+        font-size: 2.0em;
+        text-align: center;
+    }
+    .divLoginZoneClass{
+        margin-top:150px;
+        margin-left:auto;
+        margin-right:auto;
+        border:1px solid #fff;
+        border-radius:4px;
+        padding:10px;
+        width:350px;
+        height:250px;
+        text-align:center;
+    }
+</style>
+<div reqc="divLoginZone" class='divLoginZoneClass'>    
+    <h3>登一下</h3>
+    <input type="text" id="pd" placeholder="請輸入密碼...">
+    <br><br>
+    <button onclick="login()" class="btn btn-primary" align="center">Login</button>
+</div>
+<script>
+    function login(){
+        dialogMyBoxOn("登入中...",false,function(){});
+        let pd = $('#pd').val().trim();
+        if(pd==''){
+            smallComment("請輸入密碼...",2000,false,{});
+            dialogMyBoxOff();
+            // shake
+            $( "div[reqc='divLoginZone']" ).effect( "shake",600 );
+            return;
+        }
+        myAjax_async_json('{{BASE_URL}}apitester/login_check', {pd: pd}, function(jd){            
+            dialogMyBoxOff();
+            if(jd.status=='OK'){
+                smallComment("登入成功...",2000,false,{});
+                setTimeout(function(){
+                    location.href = '{{BASE_URL}}apitester/showPanel';
+                },100);
+            }
+            else{
+                smallComment("登入失敗..." + jd['reason'],2000,false,{});
+                // 畫面搖一下                        
+                $( "div[reqc='divLoginZone']" ).effect( "shake",600 );
+            }
+        });
+    }
+    // change text to pd
+    $("#pd").prop("type",base64_decode("cGFzc3dvcmQ="));
+
+    $("#pd").off().keypress(function(e){
+        if(e.keyCode==13){
+            login();
+        }
+    });
+
+    // matrix
+    myMatrix($("div[reqc='divLoginZone']"));
+
+    // focus
+    $('#pd').focus();
+</script>

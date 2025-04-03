@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>簡易圖台 Hello G</title>
+    <script src="https://easymap.gis.tw/easymap/easymap/easymap.js?v=7&no_mapbox&no_windy&no_html2canvas&no_heatmap"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-migrate-3.5.2.min.js" integrity="sha256-ocUeptHNod0gW2X1Z+ol3ONVAGWzIJXUmIs+4nUeDLI=" crossorigin="anonymous"></script>
+    <script src="https://easymap.gis.tw/easymap/js/php.js"></script>
+    <script src="https://easymap.gis.tw/easymap/js/include.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #map {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        window['map'] = new Easymap("map");
+        $("body").append("<div id='wait_content' style='display:none;'></div>");
+        setTimeout(function () {
+            $("#wait_content").text("Loaded");
+        }, 3500);
+    </script>
+</body>
+</html>
